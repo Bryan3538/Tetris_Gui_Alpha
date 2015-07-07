@@ -59,12 +59,12 @@ namespace Tetris_Gui_Alpha
         }
 
 
-        public override void RotateRight()
+        public override void RotateLeft()
         {
             Rotate(Math.PI / -2);
         }
 
-        public override void RotateLeft()
+        public override void RotateRight()
         {
             Rotate(Math.PI / 2);
         }

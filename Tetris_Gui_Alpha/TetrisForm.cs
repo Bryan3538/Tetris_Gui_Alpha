@@ -12,8 +12,8 @@ namespace Tetris_Gui_Alpha
 {
     public partial class TetrisForm : Form
     {
-        int boxHeight = 30;
-        int boxWidth = 30;
+        int boxHeight = 25;
+        int boxWidth = 25;
         Brush paintBrush = new SolidBrush(Color.Blue);
         Pen paintPen = new Pen(Color.LimeGreen, 1);
         Tetrimino tet;
@@ -25,21 +25,43 @@ namespace Tetris_Gui_Alpha
         private bool[,] grid = new bool[ROWS, COLS]; //filled in blocks, except the current tetrimino
         TetriminoFactory tetFact;
         private const int START_X = 5;
-        private const int START_Y = 4;
+        private const int START_Y = 0;
+        private int points = 0;
         
 
         public TetrisForm()
         {
             InitializeComponent();
-            panel1.Height = boxHeight * ROWS + 1;
-            panel1.Width = boxWidth * COLS + 1;
+            InitializeTetrisPanel();
 
+            StartNewGame();
+        }
+
+        private void StartNewGame()
+        {
+            dropDownTimer.Enabled = false;
             pos = new Point(START_X, START_Y);
             tetFact = new TetriminoFactory();
-            typesIndex = 0;
-            tet = tetFact.getTetriminoWithShape(types[typesIndex]);
+            selectRandomTetrisShape();
             InitializeGrid();
             moveTetrimino(pos);
+        }
+
+        private void selectRandomTetrisShape()
+        {
+            Random rng = new Random();
+            typesIndex = rng.Next(types.Length);
+            tet = tetFact.getTetriminoWithShape(types[typesIndex]);
+        }
+
+        private void InitializeTetrisPanel()
+        {
+            tetrisPanel.Height = boxHeight * ROWS + 1;
+            tetrisPanel.Width = boxWidth * COLS + 1;
+            Point panelPosition = new Point();
+            panelPosition.X = this.Width / 2 - tetrisPanel.Width / 2;
+            panelPosition.Y = 10;
+            tetrisPanel.Location = panelPosition;
         }
 
         private void InitializeGrid()
@@ -94,7 +116,7 @@ namespace Tetris_Gui_Alpha
             int yPos = 0;
             for (int lineCount = 0; lineCount <= ROWS; lineCount++ )
             {
-                g.DrawLine(pen, 0, yPos, panel1.Width, yPos);
+                g.DrawLine(pen, 0, yPos, tetrisPanel.Width, yPos);
                 yPos += boxHeight;
             }
 
@@ -102,7 +124,7 @@ namespace Tetris_Gui_Alpha
             int xPos = 0;
             for (int lineCount = 0; lineCount <= COLS; lineCount++)
             {
-                g.DrawLine(pen, xPos, 0, xPos, panel1.Height);
+                g.DrawLine(pen, xPos, 0, xPos, tetrisPanel.Height);
                 xPos += boxWidth;
             }
         }
@@ -117,13 +139,13 @@ namespace Tetris_Gui_Alpha
                 x = position.X + p.X;
                 y = position.Y + p.Y;
 
-                if (x >= COLS || x < 0 || y >= ROWS || y < 0)
+                if (x >= COLS || x < 0 || y >= ROWS)
                 {
                     return false;
                 }
                 else
                 {
-                    if (grid[y, x])
+                    if (y >= 0 && grid[y, x])
                         return false;
                 }
             }
@@ -142,15 +164,11 @@ namespace Tetris_Gui_Alpha
                 pos.X = newPosition.X;
                 pos.Y = newPosition.Y;
             }
-            else
-            {
-                MessageBox.Show("Shape doesn't fit at new position!");
-            }
 
             //replace tetrimino at new position (or old if check failed)
             placeTetriminoInGrid();
 
-            panel1.Invalidate();
+            tetrisPanel.Invalidate();
         }
 
 
@@ -158,7 +176,8 @@ namespace Tetris_Gui_Alpha
         {
             foreach (Point p in tet.Shape)
             {
-                grid[pos.Y + p.Y, pos.X + p.X] = false;
+                if (pos.Y + p.Y >= 0)
+                    grid[pos.Y + p.Y, pos.X + p.X] = false;
             }
         }
 
@@ -166,7 +185,8 @@ namespace Tetris_Gui_Alpha
         {
             foreach (Point p in tet.Shape)
             {
-                grid[pos.Y + p.Y, pos.X + p.X] = true;
+                if(pos.Y + p.Y >= 0)
+                    grid[pos.Y + p.Y, pos.X + p.X] = true;
             }
         }
 
@@ -187,28 +207,66 @@ namespace Tetris_Gui_Alpha
         //move it left
         private void button3_Click(object sender, EventArgs e)
         {
+            
+            moveTetriminoLeft();
+        }
+
+        private void moveTetriminoLeft()
+        {
             moveTetrimino(new Point(pos.X - 1, pos.Y));
         }
+
         //move it right
         private void button4_Click(object sender, EventArgs e)
+        {
+            moveTetriminoRight();
+        }
+
+        private void moveTetriminoRight()
         {
             moveTetrimino(new Point(pos.X + 1, pos.Y));
         }
         private void lockShapeInGrid()
         {
-            typesIndex = (typesIndex + 1) % types.Length;
-            tet = tetFact.getTetriminoWithShape(types[typesIndex]);
-            pos = new Point(START_X, START_Y);
-
             checkForCompleteRows();
 
-            panel1.Invalidate();
+            if (hasPlayerLost())
+            {
+                dropDownTimer.Stop();
+                MessageBox.Show("YOU LOSE!");
+            }
+            else 
+            {
+                selectRandomTetrisShape();
+                pos = new Point(START_X, START_Y);
+            }
+           
+            tetrisPanel.Invalidate();
+        }
+
+        private bool hasPlayerLost()
+        {
+            bool lost = true;
+            for(int col = 0; col < COLS; col++)
+            {
+                for(int row = 0; row < ROWS; row++)
+                {
+                    lost = lost && grid[row, col];
+                }
+
+                if (lost)
+                    return lost;
+
+                lost = true;
+            }
+
+            return false;
         }
 
         private void checkForCompleteRows()
         {
             bool complete = true;
-            List<int> completedRows = new List<int>();
+            int completedRows = 0;
 
             for(int row = ROWS - 1; row >= 0; row--)
             {
@@ -219,12 +277,16 @@ namespace Tetris_Gui_Alpha
 
                 if (complete)
                 {
+                    completedRows++;
                     collapseRow(row);
                     row++; //to compensate for how collapseRow moves everything up one.
                 }
-
                 complete = true;
             }
+
+            //add to points
+            points += ((completedRows * (completedRows + 1)) / 2) * 100;
+            pointsLabel.Text = points.ToString();
         }
 
         private void collapseRow(int row)
@@ -262,6 +324,11 @@ namespace Tetris_Gui_Alpha
 
         private void button1_Click(object sender, EventArgs e)
         {
+            rotateTetriminoLeft();
+        }
+
+        private void rotateTetriminoLeft()
+        {
             removeTetriminoFromGrid();
 
             tet.RotateLeft();
@@ -271,10 +338,15 @@ namespace Tetris_Gui_Alpha
 
 
             placeTetriminoInGrid();
-            panel1.Invalidate();
+            tetrisPanel.Invalidate();
         }
 
         private void button5_Click(object sender, EventArgs e)
+        {
+            rotateTetriminoRight();
+        }
+
+        private void rotateTetriminoRight()
         {
             removeTetriminoFromGrid();
 
@@ -285,7 +357,83 @@ namespace Tetris_Gui_Alpha
 
 
             placeTetriminoInGrid();
-            panel1.Invalidate();
+            tetrisPanel.Invalidate();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //if(!dropDownTimer.Enabled)
+            //    dropDownTimer.Enabled = true;
+            dropDownTimer.Start();
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //if (dropDownTimer.Enabled)
+            //    dropDownTimer.Enabled = false;
+            dropDownTimer.Stop();
+        }
+
+        private void dropDownTimer_Tick(object sender, EventArgs e)
+        {
+            moveTetriminoDown();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            StartNewGame();
+        }
+
+        private void TetrisForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (char.ToUpper(e.KeyChar))
+            {
+                case (char)Keys.A:
+                case (char)Keys.Left:
+                    moveTetriminoLeft();
+                    break;
+                case (char)Keys.S:
+                case (char)Keys.Down:
+                    moveTetriminoDown();
+                    break;
+                case (char)Keys.D:
+                case (char)Keys.Right:
+                    moveTetriminoRight();
+                    break;
+                case (char)Keys.Q:
+                case (char)Keys.Up:
+                    rotateTetriminoLeft();
+                    break;
+                case (char)Keys.E:
+                    rotateTetriminoRight();
+                    break;
+            }
+
+            #region keydownhandler
+            //Used if handling in keydown instead of keypressed
+            //switch (e.KeyData)
+            //{
+            //    case Keys.A:
+            //    case Keys.Left:
+            //        moveTetriminoLeft();
+            //        break;
+            //    case Keys.S:
+            //    case Keys.Down:
+            //        moveTetriminoDown();
+            //        break;
+            //    case Keys.D:
+            //    case Keys.Right:
+            //        moveTetriminoRight();
+            //        break;
+            //    case Keys.Q:
+            //    case Keys.Up:
+            //        rotateTetriminoLeft();
+            //        break;
+            //    case Keys.E:
+            //        rotateTetriminoRight();
+            //        break;
+            //}
+            #endregion
         }
     }
 }

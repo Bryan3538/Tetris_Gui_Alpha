@@ -19,18 +19,18 @@ namespace Tetris_Gui_Alpha
             shape[3] = new Point(0, -1);
         }
 
-        public override void RotateRight()
+        public override void RotateLeft()
         {
             rotation = (rotation + 90) % 360;
             Rotate();
         }
 
-        public override void RotateLeft()
+        public override void RotateRight()
         {
             rotation -= 90;
 
             if (rotation < 0)
-                rotation = 360 - rotation;
+                rotation = 270;
 
             Rotate();
         }
