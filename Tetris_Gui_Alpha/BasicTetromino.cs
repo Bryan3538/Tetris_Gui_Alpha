@@ -30,30 +30,40 @@ namespace Tetris_Gui_Alpha
                     shape[1] = new Point(0, -1);
                     shape[2] = new Point(0, 1);
                     shape[3] = new Point(-1, 1);
+                    fillBrush = Brushes.Orange;
+                    borderPen = new Pen(Color.Peru, BORDER_WIDTH);
                     break;
                 case 'J':
                     shape[0] = new Point(0, 0);
                     shape[1] = new Point(0, -1);
                     shape[2] = new Point(0, 1);
                     shape[3] = new Point(1, 1);
+                    fillBrush = Brushes.Blue;
+                    borderPen = new Pen(Color.MediumBlue, BORDER_WIDTH);
                     break;
                 case 'S':
                     shape[0] = new Point(0, 0);
                     shape[1] = new Point(1, 0);
                     shape[2] = new Point(0, -1);
                     shape[3] = new Point(-1, -1);
+                    fillBrush = Brushes.LimeGreen;
+                    borderPen = new Pen(Color.Green, BORDER_WIDTH);
                     break;
                 case 'Z':
                     shape[0] = new Point(0, 0);
                     shape[1] = new Point(-1, 0);
                     shape[2] = new Point(0, -1);
                     shape[3] = new Point(1, -1);
+                    fillBrush = Brushes.Red;
+                    borderPen = new Pen(Color.Firebrick, BORDER_WIDTH);
                     break;
                 default: //T
                     shape[0] = new Point(0, 0);
                     shape[1] = new Point(-1, 0);
                     shape[2] = new Point(1, 0);
                     shape[3] = new Point(0, -1);
+                    fillBrush = Brushes.Orchid;
+                    borderPen = new Pen(Color.MediumOrchid, BORDER_WIDTH);
                     break;
             }
         }

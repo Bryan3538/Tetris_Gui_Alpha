@@ -10,6 +10,9 @@ namespace Tetris_Gui_Alpha
     abstract class Tetromino
     {
         protected Point[] shape;
+        protected Brush fillBrush;
+        protected Pen borderPen;
+        protected const int BORDER_WIDTH = 3;
 
         protected Tetromino()
         {
@@ -41,6 +44,16 @@ namespace Tetris_Gui_Alpha
                 return copy;
             }
 
+        }
+
+        public Brush FillBrush
+        {
+            get { return fillBrush; }
+        }
+
+        public Pen BorderPen
+        {
+            get { return borderPen; }
         }
 
         //public int Height

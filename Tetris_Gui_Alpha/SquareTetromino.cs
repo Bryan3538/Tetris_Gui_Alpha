@@ -15,6 +15,8 @@ namespace Tetris_Gui_Alpha
             shape[1] = new Point(1, 0);
             shape[2] = new Point(1, -1);
             shape[3] = new Point(0, -1);
+            fillBrush = Brushes.Gold;
+            borderPen = new Pen(Color.DarkGoldenrod, BORDER_WIDTH);
         }
 
         public override void RotateRight()

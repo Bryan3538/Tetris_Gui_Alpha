@@ -14,9 +14,17 @@ namespace Tetris_Gui_Alpha
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new TetrisForm());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new TetrisForm());
+            } catch(Exception e)
+            {
+                Console.WriteLine("STACK TRACE:\n" + e.StackTrace);
+                Console.WriteLine("MESSAGE:\t" + e.Message);
+                Environment.Exit(-1);
+            }
         }
     }
 }
