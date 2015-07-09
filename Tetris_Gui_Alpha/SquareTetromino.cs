@@ -7,9 +7,9 @@ using System.Drawing;
 
 namespace Tetris_Gui_Alpha
 {
-    class SquareTetrimino : Tetrimino
+    class SquareTetromino : Tetromino
     {
-        public SquareTetrimino()
+        public SquareTetromino()
         {
             shape[0] = new Point(0, 0);
             shape[1] = new Point(1, 0);

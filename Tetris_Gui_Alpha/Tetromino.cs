@@ -7,16 +7,16 @@ using System.Drawing;
 
 namespace Tetris_Gui_Alpha
 {
-    abstract class Tetrimino
+    abstract class Tetromino
     {
         protected Point[] shape;
 
-        protected Tetrimino()
+        protected Tetromino()
         {
             shape = new Point[4];
         }
 
-        protected Tetrimino(Tetrimino t2)
+        protected Tetromino(Tetromino t2)
         {
             this.shape[0] = t2.shape[0];
             this.shape[1] = t2.shape[1];

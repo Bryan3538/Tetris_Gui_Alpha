@@ -10,9 +10,9 @@ namespace Tetris_Gui_Alpha
     /// <summary>
     ///     This class represents all Tetrimino shapes other than 'I' and 'O'
     /// </summary>
-    class BasicTetrimino : Tetrimino
+    class BasicTetromino : Tetromino
     {
-        public BasicTetrimino() : base()
+        public BasicTetromino() : base()
         {
             shape[0] = new Point(0, 0);
             shape[1] = new Point(0, -1);
@@ -20,7 +20,7 @@ namespace Tetris_Gui_Alpha
             shape[3] = new Point(1, 1);
         }
 
-        public BasicTetrimino(char type) : base()
+        public BasicTetromino(char type) : base()
         {
 
             switch (Char.ToUpper(type))

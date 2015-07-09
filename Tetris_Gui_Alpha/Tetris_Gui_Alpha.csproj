@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicTetrimino.cs" />
-    <Compile Include="SquareTetrimino.cs" />
+    <Compile Include="BasicTetromino.cs" />
+    <Compile Include="SquareTetromino.cs" />
     <Compile Include="TetrisForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,9 +54,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StraightTetrimino.cs" />
-    <Compile Include="Tetrimino.cs" />
-    <Compile Include="TetriminoFactory.cs" />
+    <Compile Include="StraightTetromino.cs" />
+    <Compile Include="Tetromino.cs" />
+    <Compile Include="TetrominoFactory.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

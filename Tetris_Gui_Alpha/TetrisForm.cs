@@ -32,12 +32,13 @@ namespace Tetris_Gui_Alpha
         private int boxWidth;
         private Brush paintBrush;
         private Pen paintPen;
-        private Tetrimino tet;
+        private Tetromino tet;
         private Point pos;
         private char[] types;
         private int typesIndex;
         private bool[,] grid;
-        private TetriminoFactory tetFact;
+        private Brush[,] brushes;
+        private TetrominoFactory tetFact;
         private int points;
         private WMPLib.WindowsMediaPlayer backgroundThemePlayer;
         private const string BACKGROUND_THEME_URL = @"sounds/theme.mp3";
@@ -260,7 +261,7 @@ namespace Tetris_Gui_Alpha
         {
             dropDownTimer.Enabled = false;
             pos = new Point(new Random().Next(COLS - 1) + 1, START_Y);
-            tetFact = new TetriminoFactory();
+            tetFact = new TetrominoFactory();
             selectRandomTetrisShape();
             InitializeGrid();
             moveTetrimino(pos);

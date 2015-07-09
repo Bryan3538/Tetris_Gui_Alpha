@@ -7,11 +7,11 @@ using System.Drawing;
 
 namespace Tetris_Gui_Alpha
 {
-    class StraightTetrimino : Tetrimino
+    class StraightTetromino : Tetromino
     {
         private int rotation = 0;
 
-        public StraightTetrimino() : base()
+        public StraightTetromino() : base()
         {
             shape[0] = new Point(0, 1);
             shape[1] = new Point(0, 2);
