@@ -30,15 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tetrisPanel = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.moveDownButton = new System.Windows.Forms.Button();
+            this.moveLeftButton = new System.Windows.Forms.Button();
+            this.moveRightButton = new System.Windows.Forms.Button();
+            this.rotateLeftButton = new System.Windows.Forms.Button();
+            this.rotateRightButton = new System.Windows.Forms.Button();
             this.dropDownTimer = new System.Windows.Forms.Timer(this.components);
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
+            this.startButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.pointsLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -49,92 +48,82 @@
             this.tetrisPanel.Name = "tetrisPanel";
             this.tetrisPanel.Size = new System.Drawing.Size(201, 441);
             this.tetrisPanel.TabIndex = 0;
-            this.tetrisPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
+            this.tetrisPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.tetrisPanel_Paint);
             // 
-            // button2
+            // moveDownButton
             // 
-            this.button2.Location = new System.Drawing.Point(275, 602);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Down";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.moveDownButton.Location = new System.Drawing.Point(275, 602);
+            this.moveDownButton.Name = "moveDownButton";
+            this.moveDownButton.Size = new System.Drawing.Size(75, 23);
+            this.moveDownButton.TabIndex = 2;
+            this.moveDownButton.Text = "Down";
+            this.moveDownButton.UseVisualStyleBackColor = true;
+            this.moveDownButton.Click += new System.EventHandler(this.moveDownButton_Click);
             // 
-            // button3
+            // moveLeftButton
             // 
-            this.button3.Location = new System.Drawing.Point(190, 575);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Left";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.moveLeftButton.Location = new System.Drawing.Point(190, 575);
+            this.moveLeftButton.Name = "moveLeftButton";
+            this.moveLeftButton.Size = new System.Drawing.Size(75, 23);
+            this.moveLeftButton.TabIndex = 3;
+            this.moveLeftButton.Text = "Left";
+            this.moveLeftButton.UseVisualStyleBackColor = true;
+            this.moveLeftButton.Click += new System.EventHandler(this.moveLeftButton_Click);
             // 
-            // button4
+            // moveRightButton
             // 
-            this.button4.Location = new System.Drawing.Point(360, 575);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Right";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.moveRightButton.Location = new System.Drawing.Point(360, 575);
+            this.moveRightButton.Name = "moveRightButton";
+            this.moveRightButton.Size = new System.Drawing.Size(75, 23);
+            this.moveRightButton.TabIndex = 4;
+            this.moveRightButton.Text = "Right";
+            this.moveRightButton.UseVisualStyleBackColor = true;
+            this.moveRightButton.Click += new System.EventHandler(this.moveRightButton_Click);
             // 
-            // button1
+            // rotateLeftButton
             // 
-            this.button1.Location = new System.Drawing.Point(190, 628);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Rotate Left";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.rotateLeftButton.Location = new System.Drawing.Point(190, 628);
+            this.rotateLeftButton.Name = "rotateLeftButton";
+            this.rotateLeftButton.Size = new System.Drawing.Size(75, 23);
+            this.rotateLeftButton.TabIndex = 5;
+            this.rotateLeftButton.Text = "Rotate Left";
+            this.rotateLeftButton.UseVisualStyleBackColor = true;
+            this.rotateLeftButton.Click += new System.EventHandler(this.rotateLeftButton_Click);
             // 
-            // button5
+            // rotateRightButton
             // 
-            this.button5.Location = new System.Drawing.Point(360, 628);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "Rotate Right";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.rotateRightButton.Location = new System.Drawing.Point(360, 628);
+            this.rotateRightButton.Name = "rotateRightButton";
+            this.rotateRightButton.Size = new System.Drawing.Size(75, 23);
+            this.rotateRightButton.TabIndex = 6;
+            this.rotateRightButton.Text = "Rotate Right";
+            this.rotateRightButton.UseVisualStyleBackColor = true;
+            this.rotateRightButton.Click += new System.EventHandler(this.rotateRightButton_Click);
             // 
             // dropDownTimer
             // 
             this.dropDownTimer.Interval = 500;
             this.dropDownTimer.Tick += new System.EventHandler(this.dropDownTimer_Tick);
             // 
-            // button6
+            // startButton
             // 
-            this.button6.Location = new System.Drawing.Point(230, 673);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(75, 23);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "Start";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.startButton.Location = new System.Drawing.Point(230, 673);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(75, 23);
+            this.startButton.TabIndex = 7;
+            this.startButton.Text = "Start";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
-            // button7
+            // stopButton
             // 
-            this.button7.Location = new System.Drawing.Point(311, 673);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(75, 23);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "Stop";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(530, 673);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(75, 23);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "Reset Game";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.stopButton.Location = new System.Drawing.Point(311, 673);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(75, 23);
+            this.stopButton.TabIndex = 8;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // label1
             // 
@@ -161,14 +150,13 @@
             this.ClientSize = new System.Drawing.Size(617, 708);
             this.Controls.Add(this.pointsLabel);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.stopButton);
+            this.Controls.Add(this.startButton);
+            this.Controls.Add(this.rotateRightButton);
+            this.Controls.Add(this.rotateLeftButton);
+            this.Controls.Add(this.moveRightButton);
+            this.Controls.Add(this.moveLeftButton);
+            this.Controls.Add(this.moveDownButton);
             this.Controls.Add(this.tetrisPanel);
             this.KeyPreview = true;
             this.Name = "TetrisForm";
@@ -182,15 +170,14 @@
         #endregion
 
         private System.Windows.Forms.Panel tetrisPanel;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button moveDownButton;
+        private System.Windows.Forms.Button moveLeftButton;
+        private System.Windows.Forms.Button moveRightButton;
+        private System.Windows.Forms.Button rotateLeftButton;
+        private System.Windows.Forms.Button rotateRightButton;
         private System.Windows.Forms.Timer dropDownTimer;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.Button stopButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label pointsLabel;
     }
