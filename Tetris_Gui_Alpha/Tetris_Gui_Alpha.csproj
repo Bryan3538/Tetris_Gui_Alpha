@@ -65,6 +65,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="TetrisForm.resx">
       <DependentUpon>TetrisForm.cs</DependentUpon>
@@ -92,6 +93,24 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9467-tetris-room-1366x768-abstract-wallpaper.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sm_tetris_london-wallpaper-HD.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetris-ipad-bg-sm.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetris-pop-bg-sm.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tetris-wallpaper-pattern-background.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

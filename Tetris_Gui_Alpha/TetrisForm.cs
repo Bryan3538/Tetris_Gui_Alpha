@@ -22,18 +22,19 @@ namespace Tetris_Gui_Alpha
 
         private const int ROWS = 22;
         private const int COLS = 10;
-        //private const int START_X = 5; //replaced with random generation
         private const int START_Y = 0;
         private const int SHAPES_TO_STORE = 50;
         private const int REFILL_QUEUE_THRESHOLD = 1;
+        private const int BOX_HEIGHT = 28;
+        private const int BOX_WIDTH = 28;
+        private const int DEFAULT_DROPDOWN_INTERVAL = 750;
         
 
         #endregion
 
         #region Variables
 
-        private int boxHeight;
-        private int boxWidth;
+        
         private Brush defaultBrush;
         private Pen defaultPen;
         private Tetromino tet;
@@ -48,6 +49,8 @@ namespace Tetris_Gui_Alpha
         private const string BACKGROUND_THEME_URL = @"sounds/theme.mp3";
         private bool gamePlaying;
         private Queue<Tetromino> futureShapes;
+        private int level;
+        private int rows;
 
         #endregion
 
@@ -67,8 +70,6 @@ namespace Tetris_Gui_Alpha
                 null, previewShapePanel, new object[] { true });
 
             #region Variable_Initialization
-            boxHeight = 25;
-            boxWidth = 25;
             defaultBrush = new SolidBrush(Color.Blue);
             defaultPen = new Pen(Color.LimeGreen, 1);
             types = new char[] { 'L', 'J', 'S', 'Z', 'T', 'O', 'I' };
@@ -82,22 +83,27 @@ namespace Tetris_Gui_Alpha
             backgroundThemePlayer.controls.stop();
             gamePlaying = false;
             futureShapes = new Queue<Tetromino>(SHAPES_TO_STORE);
+            level = 0;
+            rows = 0;
             #endregion
 
-            InitializeTetrisPanel();
+            //tetrisPanel.BackColor = Color.FromArgb(230, 80, 80, 80);
+            //groupBox3.BackColor = Color.FromArgb(200, 120, 120, 120);
+
+            //InitializeTetrisPanel();
 
             SetupNewGame();
         }
 
-        private void InitializeTetrisPanel()
-                {
-                    tetrisPanel.Height = boxHeight * ROWS + 1;
-                    tetrisPanel.Width = boxWidth * COLS + 1;
-                    Point panelPosition = new Point();
-                    panelPosition.X = this.Width / 2 - tetrisPanel.Width / 2;
-                    panelPosition.Y = 10;
-                    tetrisPanel.Location = panelPosition;
-                }
+        //private void InitializeTetrisPanel()
+        //{
+        //    tetrisPanel.Height = BOX_HEIGHT * ROWS + 1;
+        //    tetrisPanel.Width = BOX_WIDTH * COLS + 1;
+        //    Point panelPosition = new Point();
+        //    panelPosition.X = this.Width / 2 - tetrisPanel.Width / 2;
+        //    panelPosition.Y = 10;
+        //    tetrisPanel.Location = panelPosition;
+        //}
 
         private void InitializeGrid()
         {
@@ -284,14 +290,22 @@ namespace Tetris_Gui_Alpha
         private void SetupNewGame()
         {
             dropDownTimer.Enabled = false;
+            dropDownTimer.Interval = DEFAULT_DROPDOWN_INTERVAL;
+            level = 0;
+            rows = 0;
+            levelLabel.Text = "0";
+            linesLabel.Text = "0";
             pos = new Point(new Random().Next(COLS - 1) + 1, START_Y);
             tetFact = new TetrominoFactory();
+
+            if (futureShapes.Count > 0)
+                futureShapes.Clear();
+
             FillMovesQueue();
             tet = futureShapes.Dequeue();
             InitializeGrid();
 
             moveTetrimino(pos);
-            disableInputs();
         }
 
         private void FillMovesQueue()
@@ -312,7 +326,8 @@ namespace Tetris_Gui_Alpha
             dropDownTimer.Stop();
             backgroundThemePlayer.controls.stop();
             gamePlaying = false;
-            disableInputs();
+            startButton.Enabled = true;
+            stopButton.Enabled = false;
 
             //TODO: Play some kind of losing sound
         }
@@ -324,6 +339,8 @@ namespace Tetris_Gui_Alpha
             gamePlaying = true;
             enableInputs();
             previewShapePanel.Invalidate();
+            stopButton.Enabled = true;
+            startButton.Enabled = false;
         }
 
         private bool hasPlayerLost()
@@ -377,8 +394,22 @@ namespace Tetris_Gui_Alpha
             }
 
             //add to points
-            points += ((completedRows * (completedRows + 1)) / 2) * 100;
-            pointsLabel.Text = points.ToString();
+            points += ((completedRows * (completedRows + 1)) / 2) * (100 * level);
+            pointsLabel.Text = points.ToString("N0");
+            //add to rows
+            if (completedRows > 0)
+            {
+                rows += completedRows;
+                linesLabel.Text = rows.ToString("N0");
+            }
+            //determine level
+            if ((rows > (level * (level + 1) / 2) * 5 && level != 0) || (level == 0 && rows >= 3))
+            {
+                level++;
+                dropDownTimer.Interval = (int)(Math.Pow(0.9, level) * dropDownTimer.Interval);
+                levelLabel.Text = level.ToString("N0");
+            } 
+                
         }
 
         private void collapseRow(int row)
@@ -422,20 +453,20 @@ namespace Tetris_Gui_Alpha
                 {
                     if (grid[row, col] == true)
                     {
-                        x = col * boxWidth;
-                        y = row * boxHeight;
-                        e.Graphics.FillRectangle(fillBrushes[row, col], x, y, boxWidth, boxHeight);
-                        e.Graphics.DrawRectangle(borderPens[row, col], x, y, boxWidth, boxHeight);
+                        x = col * BOX_WIDTH;
+                        y = row * BOX_HEIGHT;
+                        e.Graphics.FillRectangle(fillBrushes[row, col], x, y, BOX_WIDTH, BOX_HEIGHT);
+                        e.Graphics.DrawRectangle(borderPens[row, col], x, y, BOX_WIDTH, BOX_HEIGHT);
                     }
                 }
             }
 
             foreach (Point p in tet.Shape)
             {
-                x = (pos.X + p.X) * boxWidth;
-                y = (pos.Y + p.Y) * boxHeight;
-                e.Graphics.FillRectangle(tet.FillBrush, x, y, boxWidth, boxHeight);
-                e.Graphics.DrawRectangle(tet.BorderPen, x, y, boxWidth, boxHeight);
+                x = (pos.X + p.X) * BOX_WIDTH;
+                y = (pos.Y + p.Y) * BOX_HEIGHT;
+                e.Graphics.FillRectangle(tet.FillBrush, x, y, BOX_WIDTH, BOX_HEIGHT);
+                e.Graphics.DrawRectangle(tet.BorderPen, x, y, BOX_WIDTH, BOX_HEIGHT);
             }
         }
 
@@ -449,7 +480,7 @@ namespace Tetris_Gui_Alpha
             for (int lineCount = 0; lineCount <= ROWS; lineCount++ )
             {
                 g.DrawLine(pen, 0, yPos, tetrisPanel.Width, yPos);
-                yPos += boxHeight;
+                yPos += BOX_HEIGHT;
             }
 
             //vertical lines
@@ -457,7 +488,7 @@ namespace Tetris_Gui_Alpha
             for (int lineCount = 0; lineCount <= COLS; lineCount++)
             {
                 g.DrawLine(pen, xPos, 0, xPos, tetrisPanel.Height);
-                xPos += boxWidth;
+                xPos += BOX_WIDTH;
             }
         }
 
@@ -465,21 +496,21 @@ namespace Tetris_Gui_Alpha
         {
             if(futureShapes.Count >= 1 && gamePlaying)
             {
-                int xBase = previewShapePanel.Width / 2 - boxWidth / 2;
-                int yBase = previewShapePanel.Height / 2 - boxHeight / 2;
+                int xBase = previewShapePanel.Width / 2 - BOX_WIDTH / 2;
+                int yBase = previewShapePanel.Height / 2 - BOX_HEIGHT / 2;
 
                 Tetromino nextShape = futureShapes.Peek();
 
                 foreach(Point p in nextShape.Shape)
                 {
-                    int x = xBase + p.X * boxWidth;
-                    int y = yBase + p.Y * boxWidth;
+                    int x = xBase + p.X * BOX_WIDTH;
+                    int y = yBase + p.Y * BOX_WIDTH;
                     //fill the shape
-                    e.Graphics.FillRectangle(nextShape.FillBrush, xBase + p.X * boxWidth, yBase + p.Y * boxWidth,
-                        boxWidth, boxHeight);
+                    e.Graphics.FillRectangle(nextShape.FillBrush, xBase + p.X * BOX_WIDTH, yBase + p.Y * BOX_WIDTH,
+                        BOX_WIDTH, BOX_HEIGHT);
                     //draw the border
-                    e.Graphics.DrawRectangle(nextShape.BorderPen, xBase + p.X * boxWidth, yBase + p.Y * boxWidth,
-                        boxWidth, boxHeight);
+                    e.Graphics.DrawRectangle(nextShape.BorderPen, xBase + p.X * BOX_WIDTH, yBase + p.Y * BOX_WIDTH,
+                        BOX_WIDTH, BOX_HEIGHT);
                 }
             }
 
@@ -490,17 +521,6 @@ namespace Tetris_Gui_Alpha
 
 
         #region Input_&_Event_Handling
-
-        private void disableInputs()
-        {
-            foreach (Control c in this.Controls)
-            {
-                if (c.GetType() == typeof(Button) && !c.Equals(startButton))
-                {
-                    c.Enabled = false;
-                }
-            }
-        }
 
         private void enableInputs()
         {
@@ -617,6 +637,21 @@ namespace Tetris_Gui_Alpha
         }
 
         #endregion
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show( this,
+                "Q\t=\tRotate Left" + Environment.NewLine +
+                "E\t=\tRotate Right" + Environment.NewLine +
+                "A\t=\tMove Left" + Environment.NewLine +
+                "S\t=\tMove Down" + Environment.NewLine +
+                "D\t=\tMove Right" + Environment.NewLine,
+
+                "Controls",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.None
+                );
+        }
 
         
     }
