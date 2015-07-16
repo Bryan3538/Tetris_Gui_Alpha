@@ -55,9 +55,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StraightTetromino.cs" />
-    <Compile Include="TetrisGroupBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Tetromino.cs" />
     <Compile Include="TetrominoFactory.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -68,7 +65,6 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="TetrisForm.resx">
       <DependentUpon>TetrisForm.cs</DependentUpon>
@@ -96,15 +92,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tetris1.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tetris2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\tetris3.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
