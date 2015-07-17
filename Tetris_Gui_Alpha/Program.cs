@@ -23,6 +23,7 @@ namespace Tetris_Gui_Alpha
             {
                 Console.WriteLine("STACK TRACE:\n" + e.StackTrace);
                 Console.WriteLine("MESSAGE:\t" + e.Message);
+                Console.WriteLine("INNER EX:\t" + e.InnerException);
                 Environment.Exit(-1);
             }
         }

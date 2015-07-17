@@ -48,6 +48,8 @@ namespace Tetris_Gui_Alpha
         private WMPLib.WindowsMediaPlayer backgroundThemePlayer;
         private const string BACKGROUND_THEME_URL = @"sounds/theme.mp3";
         private bool gamePlaying;
+        private bool paused;
+        private bool muted;
         private Queue<Tetromino> futureShapes;
         private int level;
         private int rows;
@@ -87,8 +89,7 @@ namespace Tetris_Gui_Alpha
             rows = 0;
             #endregion
 
-            //tetrisPanel.BackColor = Color.FromArgb(230, 80, 80, 80);
-            //groupBox3.BackColor = Color.FromArgb(200, 120, 120, 120);
+            StyleGUI();
 
             //InitializeTetrisPanel();
 
@@ -116,6 +117,45 @@ namespace Tetris_Gui_Alpha
                     borderPens[row, col] = null;
                 }
             }
+        }
+
+        private void StyleGUI()
+        {
+            Color backColor = Color.FromArgb(210, 155, 78, 0);
+            tetrisPanel.BackColor = backColor;
+            pointsPanel.BackColor = backColor;
+            levelPanel.BackColor = backColor;
+            linesPanel.BackColor = backColor;
+            previewShapePanel.BackColor = backColor;
+
+            nextShapeLabel.ForeColor = Color.WhiteSmoke;
+
+            pointsDescriptionLabel.ForeColor = Color.WhiteSmoke;
+            pointsLabel.ForeColor = Color.WhiteSmoke;
+
+            levelDescriptionLabel.ForeColor = Color.WhiteSmoke;
+            levelLabel.ForeColor = Color.WhiteSmoke;
+
+            linesDescriptionLabel.ForeColor = Color.WhiteSmoke;
+            linesLabel.ForeColor = Color.WhiteSmoke;
+            
+
+            Color buttonColor = Color.FromArgb(210, 155, 78, 0);
+            startButton.BackColor = buttonColor;
+            startButton.ForeColor = Color.WhiteSmoke;
+
+            stopButton.BackColor = buttonColor;
+            stopButton.ForeColor = Color.WhiteSmoke;
+
+            pauseButton.BackColor = buttonColor;
+            pauseButton.ForeColor = Color.WhiteSmoke;
+
+            controlsLinkLabel.BackColor = backColor;
+            controlsLinkLabel.LinkColor = Color.WhiteSmoke;
+            controlsLinkLabel.ActiveLinkColor = Color.WhiteSmoke;
+
+            muteCheckBox.BackColor = backColor;
+            muteCheckBox.ForeColor = Color.WhiteSmoke;
         }
 
         #endregion
@@ -293,8 +333,12 @@ namespace Tetris_Gui_Alpha
             dropDownTimer.Interval = DEFAULT_DROPDOWN_INTERVAL;
             level = 0;
             rows = 0;
+            points = 0;
+            pointsLabel.Text = "0";
             levelLabel.Text = "0";
             linesLabel.Text = "0";
+            paused = false;
+            pauseButton.Text = "Pause";
             pos = new Point(new Random().Next(COLS - 1) + 1, START_Y);
             tetFact = new TetrominoFactory();
 
@@ -328,6 +372,7 @@ namespace Tetris_Gui_Alpha
             gamePlaying = false;
             startButton.Enabled = true;
             stopButton.Enabled = false;
+            pauseButton.Enabled = false;
 
             //TODO: Play some kind of losing sound
         }
@@ -335,12 +380,14 @@ namespace Tetris_Gui_Alpha
         private void startGame()
         {
             dropDownTimer.Start();
-            backgroundThemePlayer.controls.play();
+            if(!muted)
+                backgroundThemePlayer.controls.play();
             gamePlaying = true;
             enableInputs();
             previewShapePanel.Invalidate();
             stopButton.Enabled = true;
             startButton.Enabled = false;
+            pauseButton.Enabled = true;
         }
 
         private bool hasPlayerLost()
@@ -436,6 +483,33 @@ namespace Tetris_Gui_Alpha
             }
         }
 
+        private void togglePause()
+        {
+            if (!paused)
+            {
+                paused = true;
+                pauseButton.Text = "Unpause";
+            }
+            else
+            {
+                paused = false;
+                pauseButton.Text = "Pause";
+            }
+
+
+            if(paused)
+            {
+                backgroundThemePlayer.controls.pause();
+                dropDownTimer.Stop();
+            }
+            else
+            {
+                if(!muted)
+                    backgroundThemePlayer.controls.play();
+                dropDownTimer.Start();
+            }
+        }
+
         #endregion
 
 
@@ -472,7 +546,7 @@ namespace Tetris_Gui_Alpha
 
         private void DrawGridLines(Graphics g)
         {
-            Pen pen = new Pen(Color.MediumBlue, 1);
+            Pen pen = new Pen(Color.WhiteSmoke, 1);
             
 
             //horizontal lines
@@ -494,6 +568,7 @@ namespace Tetris_Gui_Alpha
 
         private void previewShapePanel_Paint(object sender, PaintEventArgs e)
         {
+            ControlPaint.DrawBorder(e.Graphics, this.previewShapePanel.ClientRectangle, Color.WhiteSmoke, ButtonBorderStyle.Solid);
             if(futureShapes.Count >= 1 && gamePlaying)
             {
                 int xBase = previewShapePanel.Width / 2 - BOX_WIDTH / 2;
@@ -512,9 +587,36 @@ namespace Tetris_Gui_Alpha
                     e.Graphics.DrawRectangle(nextShape.BorderPen, xBase + p.X * BOX_WIDTH, yBase + p.Y * BOX_WIDTH,
                         BOX_WIDTH, BOX_HEIGHT);
                 }
-            }
+            } 
+        }
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show(this,
+                "Q\t=\tRotate Left" + Environment.NewLine +
+                "E\t=\tRotate Right" + Environment.NewLine +
+                "A\t=\tMove Left" + Environment.NewLine +
+                "S\t=\tMove Down" + Environment.NewLine +
+                "D\t=\tMove Right" + Environment.NewLine,
 
-            
+                "Controls",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.None
+                );
+        }
+
+        private void pointsPanel_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.pointsPanel.ClientRectangle, Color.WhiteSmoke, ButtonBorderStyle.Solid);
+        }
+
+        private void levelPanel_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.levelPanel.ClientRectangle, Color.WhiteSmoke, ButtonBorderStyle.Solid);
+        }
+
+        private void linesPanel_Paint(object sender, PaintEventArgs e)
+        {
+            ControlPaint.DrawBorder(e.Graphics, this.linesPanel.ClientRectangle, Color.WhiteSmoke, ButtonBorderStyle.Solid);
         }
 
         #endregion
@@ -576,14 +678,14 @@ namespace Tetris_Gui_Alpha
             moveTetriminoDown();
         }
 
-        private void resetButton_Click(object sender, EventArgs e)
+        private void pauseButton_Click(object sender, EventArgs e)
         {
-            SetupNewGame();
+            togglePause();
         }
 
         private void TetrisForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (gamePlaying)
+            if (gamePlaying && !paused)
             {
                 switch (char.ToUpper(e.KeyChar))
                 {
@@ -636,23 +738,23 @@ namespace Tetris_Gui_Alpha
             #endregion
         }
 
-        #endregion
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void muteCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MessageBox.Show( this,
-                "Q\t=\tRotate Left" + Environment.NewLine +
-                "E\t=\tRotate Right" + Environment.NewLine +
-                "A\t=\tMove Left" + Environment.NewLine +
-                "S\t=\tMove Down" + Environment.NewLine +
-                "D\t=\tMove Right" + Environment.NewLine,
+            muted = muteCheckBox.Checked;
 
-                "Controls",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.None
-                );
+            if (muted)
+                backgroundThemePlayer.controls.pause();
+            else if (gamePlaying && !paused)
+                backgroundThemePlayer.controls.play();
         }
 
+        #endregion
+
+        
+
+        
+
+        
         
     }
 }

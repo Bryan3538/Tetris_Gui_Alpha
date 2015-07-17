@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicTetromino.cs" />
+    <Compile Include="InfoPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SquareTetromino.cs" />
     <Compile Include="TetrisForm.cs">
       <SubType>Form</SubType>
