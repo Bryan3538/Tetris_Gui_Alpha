@@ -58,6 +58,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StraightTetromino.cs" />
+    <Compile Include="TetrisGame.cs" />
     <Compile Include="Tetromino.cs" />
     <Compile Include="TetrominoFactory.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -114,6 +115,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tetris-wallpaper-pattern-background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\song.mp3" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -22,37 +22,37 @@ namespace Tetris_Gui_Alpha
 
         private const int ROWS = 22;
         private const int COLS = 10;
-        private const int START_Y = 0;
         private const int SHAPES_TO_STORE = 50;
         private const int REFILL_QUEUE_THRESHOLD = 1;
+        private const int START_Y = 0;
+        
+        
         private const int BOX_HEIGHT = 28;
         private const int BOX_WIDTH = 28;
         private const int DEFAULT_DROPDOWN_INTERVAL = 750;
-        
-
+        private const string BACKGROUND_THEME_URL = @"sounds/theme.mp3";
         #endregion
 
         #region Variables
-
         
         private Brush defaultBrush;
         private Pen defaultPen;
+        private Brush[,] fillBrushes;
+        private Pen[,] borderPens;
+        private WMPLib.WindowsMediaPlayer backgroundThemePlayer;
+        private bool gamePlaying;
+        private bool paused;
+        private bool muted;
+
         private Tetromino tet;
         private char[] types;
         private Point pos;
         private bool[,] grid;
-        private Brush[,] fillBrushes;
-        private Pen[,] borderPens;
         private TetrominoFactory tetFact;
         private int points;
-        private WMPLib.WindowsMediaPlayer backgroundThemePlayer;
-        private const string BACKGROUND_THEME_URL = @"sounds/theme.mp3";
-        private bool gamePlaying;
-        private bool paused;
-        private bool muted;
-        private Queue<Tetromino> futureShapes;
         private int level;
         private int rows;
+        private Queue<Tetromino> futureShapes;
 
         #endregion
 
